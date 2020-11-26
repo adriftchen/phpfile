@@ -7,16 +7,15 @@
  */
 
 include_once "base.php";
-date_default_timezone_set("Asia/Taipei");
 
 if(!empty($_FILES['img']['tmp_name'])){
-    echo "檔案原始名稱:".$_FILES['img']['name'];
-    echo "<br>檔案上傳成功";
-    echo "原始上傳路徑:".$_FILES['img']['tmp_name'];
+    // echo "檔案原始名稱:".$_FILES['img']['name'];
+    // echo "<br>檔案上傳成功";
+    // echo "原始上傳路徑:".$_FILES['img']['tmp_name'];
 
     $subname="";
     $subname=explode('.',$_FILES['img']['name']);
-    echo $subname=array_pop($subname);
+    $subname=array_pop($subname);
     
     $filename=date("Ymdhis").".".$subname ;
 
@@ -45,6 +44,17 @@ if(!empty($_FILES['img']['tmp_name'])){
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>檔案上傳</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        table{
+            border:3px solid black;
+            border-collapse:collapse;
+        }
+
+        td{
+            border:1px solid #999;
+            padding:5px;
+        }
+    </style>
 </head>
 <body>
  <h1 class="header">檔案上傳練習</h1>
@@ -63,7 +73,35 @@ if(!empty($_FILES['img']['tmp_name'])){
 
 
 
-    <!-- 建立一個連結來查看上傳後的圖檔 -->
+<!-- 建立一個連結來查看上傳後的圖檔 -->
+<?php
+
+$rows=all('upload');
+echo "<table>";
+echo "<td>縮圖</td>";
+echo "<td>檔案名稱</td>"; /* 這裡是原始檔名 */
+echo "<td>檔案類型</td>"; 
+echo "<td>檔案說明</td>"; 
+foreach($rows as $row){
+
+    echo "<tr>";
+    
+    if($row['type']=='圖檔'){
+        echo "<td><img src='{$row['path']}' style='width:100px'></td>";
+    }else{
+        
+        echo "<td><img src='./img/file_icon.png' style='width:20px'></td>";
+    }
+
+    echo "<td>{$row['name']}</td>";
+    echo "<td>{$row['type']}</td>";
+    echo "<td>{$row['note']}</td>";
+    
+    echo "</tr>";
+}
+
+echo "</table>";
+?>
 
 
 </body>
