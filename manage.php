@@ -52,6 +52,7 @@
 <body>
 <h1 class="header">檔案管理練習</h1>
 <!----建立上傳檔案表單及相關的檔案資訊存入資料表機制----->
+<a href="upload.php" style="display:block;width:80px;text-align:center;margin:10px auto;box-shadow:0 0 5px #ccc">檔案上傳</a>
 <?php
 include_once "base.php";
 
