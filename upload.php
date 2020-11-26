@@ -5,7 +5,7 @@
  * 3.搬移檔案
  * 4.顯示檔案列表
  */
-date_default_timezone_set(Asia/Taipei);
+date_default_timezone_set("Asia/Taipei");
 
 if(!empty($_FILES['img']['tmp_name'])){
     echo "檔案原始名稱:".$_FILES['img']['name'];
