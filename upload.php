@@ -63,7 +63,6 @@ if(!empty($_FILES['img']['tmp_name'])){
 <div>上傳的檔案:<input type="file" name="img"></div>
 <div>檔案說明:<input type="text" name="note"></div>
 <div>檔案類型:<select name="type">       
-
 <option value="圖檔">圖檔</option>
 <option value="文件">文件</option>
 <option value="其他">其他</option>

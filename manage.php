@@ -16,19 +16,81 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>檔案管理功能</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        table{
+            border:3px solid black;
+            border-collapse:collapse;
+            margin:auto;
+        }
+
+        td{
+            border:1px solid #999;
+            padding:5px;
+        }
+
+        a.primary,a.danger{
+            border-radius:10px;
+            padding:3px 8px;
+            margin:0 2px;
+            color:#ececec;
+            box-shadow:1px 1px 4px grey;
+            font-size:15px;
+        }
+
+        a.primary{
+            background: blue;
+        }
+
+        a.danger{
+           background:red;
+        }
+
+
+    </style>
+
 </head>
 <body>
 <h1 class="header">檔案管理練習</h1>
 <!----建立上傳檔案表單及相關的檔案資訊存入資料表機制----->
+<?php
+include_once "base.php";
+
+$rows=all('upload');
+echo "<table>";
+echo "<td>縮圖</td>";
+echo "<td>檔案名稱</td>"; /* 這裡是原始檔名 */
+echo "<td>檔案類型</td>"; 
+echo "<td>檔案說明</td>"; 
+echo "<td>下載</td>"; 
+echo "<td>操作</td>"; 
+foreach($rows as $row){
+
+    echo "<tr>";
+    
+    if($row['type']=='圖檔'){
+        echo "<td><img src='{$row['path']}' style='width:100px'></td>";
+    }else{
+        
+        echo "<td><img src='./img/file_icon.png' style='width:20px'></td>";
+    }
+
+    echo "<td>{$row['name']}</td>";
+    echo "<td>{$row['type']}</td>";
+    echo "<td>{$row['note']}</td>";
+    echo "<td><a href='{$row['path']}' download>下載</a></td>";
+    echo "<td>";
+    echo "  <a class='primary' href='edit.php?id={$row['id']}' >編輯</a>";
+    echo "  <a class='danger' href='del.php?id={$row['id']}' >刪除</a>";
+    echo "</td>";
+    echo "</tr>";
+}
+
+echo "</table>";
 
 
-
-
+?>
 
 <!----透過資料表來顯示檔案的資訊，並可對檔案執行更新或刪除的工作----->
-
-
-
 
 </body>
 </html>
