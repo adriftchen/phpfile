@@ -31,7 +31,7 @@ if(!empty($_FILES['img']['tmp_name'])){
 
     $filename=date("Ymdhis").".".$subname ; /* 自定義檔名，不會重複 */
 
-    move_uploaded_file($_FILES['img']['tmp_name'],"./img/".$_FILES['img']['name']);
+    move_uploaded_file($_FILES['img']['tmp_name'],"./img/".$filename);
     // $_FILES['img']['name'] 改成自定義$filename
 }
 
@@ -56,7 +56,7 @@ if(!empty($_FILES['img']['tmp_name'])){
 
 
 
-<!----建立一個連結來查看上傳後的圖檔---->  
+  
 
 
 </body>
