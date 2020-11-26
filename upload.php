@@ -62,7 +62,8 @@ if(!empty($_FILES['img']['tmp_name'])){
 <form action="?" method="post" enctype="multipart/form-data"> <!-- form上傳用post，可上傳的檔案較大-->
 <div>上傳的檔案:<input type="file" name="img"></div>
 <div>檔案說明:<input type="text" name="note"></div>
-<div>檔案類型:<select name="type">    
+<div>檔案類型:<select name="type">       
+
 <option value="圖檔">圖檔</option>
 <option value="文件">文件</option>
 <option value="其他">其他</option>
@@ -82,6 +83,7 @@ echo "<td>縮圖</td>";
 echo "<td>檔案名稱</td>"; /* 這裡是原始檔名 */
 echo "<td>檔案類型</td>"; 
 echo "<td>檔案說明</td>"; 
+echo "<td>下載</td>"; 
 foreach($rows as $row){
 
     echo "<tr>";
@@ -96,6 +98,7 @@ foreach($rows as $row){
     echo "<td>{$row['name']}</td>";
     echo "<td>{$row['type']}</td>";
     echo "<td>{$row['note']}</td>";
+    echo "<td><a href='{$row['path']}' download>下載</a></td>";
     
     echo "</tr>";
 }
