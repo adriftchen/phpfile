@@ -5,6 +5,35 @@
  * 3.搬移檔案
  * 4.顯示檔案列表
  */
+date_default_timezone_set(Asia/Taipei);
+
+if(!empty($_FILES['img']['tmp_name'])){
+    echo "檔案原始名稱:".$_FILES['img']['name'];
+    echo "<br>檔案上傳成功";
+    echo "原始上傳路徑:".$_FILES['img']['tmp_name'];
+
+    $subname="";
+    $subname=explode('.',$_FILES['img']['name']);
+    echo $subname=array_pop($subname);
+
+    //改用上面$subname抓副檔名
+    // switch($_FILES['file']['type']){
+    //     case "image/jpeg":
+    //         $subname=".jpg";
+    //     break;
+    //     case "image/png":
+    //         $subname=".png";
+    //     break;
+    //     case "image/gif":
+    //         $subname=".gif";
+    //     break;
+    // }
+
+    $filename=date("Ymdhis").".".$subname ; /* 自定義檔名，不會重複 */
+
+    move_uploaded_file($_FILES['img']['tmp_name'],"./img/".$_FILES['img']['name']);
+    // $_FILES['img']['name'] 改成自定義$filename
+}
 
 ?>
 <!DOCTYPE html>
@@ -19,7 +48,10 @@
 <body>
  <h1 class="header">檔案上傳練習</h1>
  <!----建立你的表單及設定編碼----->
-
+<form action="?" method="post" enctype="multipart/form-data"> <!-- form上傳用post，可上傳的檔案較大-->
+<input type="file" name="img">
+<input type="submit" value="上傳">
+</form>
 
 
 
