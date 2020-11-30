@@ -10,12 +10,13 @@
  * 5.輸出檔案
  */
 
-if(!empty($_FILES['photo']['tmp_name'])){
+ if(!empty($_FILES['photo']['tmp_name'])){
     echo "檔名:".$_FILES['photo']['name']."<br>";
     echo "格式:".$_FILES['photo']['type']."<br>";
     echo "大小:".round($_FILES['photo']['size']/1024)."kb<br>";
     move_uploaded_file($_FILES['photo']['tmp_name'],'./img/'.$_FILES['photo']['name']);
     $filename="./img/".$_FILES['photo']['name'];
+
     $src_info=[
         'width'=>0,
         'height'=>0,
@@ -42,24 +43,20 @@ if(!empty($_FILES['photo']['tmp_name'])){
     $src_info['width']=imagesx($src_img);
     $src_info['height']=imagesy($src_img);
     $src_info['rate']=imagesy($src_img)/imagesx($src_img);
-
     if($src_info['rate']<=1){
-
         $src_info['direction']='橫向';
     }else{
         $src_info['direction']='直向';
     }
 
-
     $dst_img=imagecreatetruecolor(200,200);
     $dst_info['width']=200;
     $dst_info['height']=200;
 
-    //要先定義顏色imagecolorallocate才能填入imagefill
     $white=imagecolorallocate($dst_img,255,255,255);
+    $red=imagecolorallocate($dst_img,255,0,0);
     imagefill($dst_img,0,0,$white);
-
-}
+ }
 
 
 ?>
@@ -97,22 +94,23 @@ if(!empty($_FILES['photo']['tmp_name'])){
 <?php
 
 if(isset($src_img) && isset($dst_img)){
+
     if($src_info['direction']=='橫向'){
 
         $dst_height=$dst_info['height']*$src_info['rate'];
         $dst_width=$dst_info['width'];
-        $dst_y=($src_info['height']-$dst_height)/2;
+        $dst_y=($dst_info['height']-$dst_height)/2;
         $dst_x=0;
+        
     }else{
         $dst_height=$dst_info['height'];
         $dst_width=$dst_info['width']*(1/$src_info['rate']);
         $dst_y=0;
-        $dst_x=($src_info['height']-$dst_height)/2;
+        $dst_x=($dst_info['width']-$dst_width)/2;
 
     }
-
-    imagecopyresampled($dst_img,$src_img,0,0,0,0,$dst_info['width'],$dst_info['height'],$src_info['width'],$src_info['height']);
-    $src_info['height'];
+    
+    imagecopyresampled($dst_img,$src_img,$dst_x,$dst_y,0,0,$dst_width,$dst_height,$src_info['width'],$src_info['height']);
     $dst_path="./dst/".$_FILES['photo']['name'];
     imagejpeg($dst_img,$dst_path);
 
@@ -121,11 +119,68 @@ if(isset($src_img) && isset($dst_img)){
     echo "</div>";
 
 }
-
+imagedestroy($dst_img);
 
 ?>
-<!----圖形加邊框----->
+<h3>圖形加邊框</h3>
+<hr>
 
+<!----圖形加邊框----->
+<?php
+    $dst_img=imagecreatetruecolor(200,200);
+    $dst_info['width']=200;
+    $dst_info['height']=200;
+
+    imagefill($dst_img,0,0,$red);
+$border=5;
+$padding=10;
+if($src_info['direction']=='橫向'){
+    $bor_width=($dst_info['width']-$padding*2);
+    $bor_height=($dst_info['height']-$padding*2)*$src_info['rate'];
+    $dst_y=10+((($dst_info['height']-$padding*2)-$bor_height)/2);
+    $dst_x=10;
+
+}else{
+    $bor_width=($dst_info['width']-$padding*2)*(1/$src_info['rate']);
+    $bor_height=($dst_info['height']-$padding*2);
+    $dst_y=10;
+    $dst_x=10+((($dst_info['width']-$padding*2)-$bor_width)/2);
+}
+echo "width:".$bor_width."<br>";
+echo "height:".$bor_height."<br>";
+echo "x:".$dst_x."<br>";
+echo "y:".$dst_y."<br>";
+
+//壓底層框線
+$img_bor=imagecreatetruecolor($bor_width,$bor_height);
+imagefill($img_bor,0,0,$white);
+imagecopyresampled($dst_img,$img_bor,$dst_x,$dst_y,0,0,$bor_width,$bor_height,$bor_width,$bor_height);
+
+if($src_info['direction']=='橫向'){
+    $dst_height=($dst_info['height']-$padding*2-$border*2)*$src_info['rate'];
+    $dst_width=($dst_info['width']-$padding*2-$border*2);
+    $dst_y=($dst_info['height']-$dst_height)/2;
+    $dst_x=$padding+$border;
+    
+}else{
+    $dst_height=($dst_info['height']-$padding*2-$border*2);
+    $dst_width=($dst_info['width']-$padding*2-$border*2)*(1/$src_info['rate']);
+    $dst_y=$padding+$border;
+    $dst_x=($dst_info['width']-$dst_width)/2;
+
+}
+
+imagecopyresampled($dst_img,$src_img,$dst_x,$dst_y,0,0,$dst_width,$dst_height,$src_info['width'],$src_info['height']);
+
+
+$dst_path="./dst/bor_".$_FILES['photo']['name'];
+imagejpeg($dst_img,$dst_path);
+
+echo "<div>";
+echo "<img src='$dst_path'>";
+echo "</div>";
+
+?>
 
 <!----產生圖形驗證碼----->
 
