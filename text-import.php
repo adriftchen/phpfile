@@ -35,6 +35,8 @@ if(!empty($_FILES['txt']['tmp_name'])){
     }
 }
 
+fclose($file); /* 要關掉不然之後其他人無法開啟這個檔案 */
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
