@@ -17,21 +17,22 @@ if(!empty($_FILES['txt']['tmp_name'])){
 
     //上傳純文字檔，並且打算將檔案內容匯入資料庫或另作處理時，需要透過一些檔案專用的指令來取得內容並加以處理
     $file=fopen("./upload/".$_FILES['txt']['name'],'r'); //r:只讀取、w:可改寫
-    $line=fgets($file); //像指針一樣，指到哪一行就取那一行的資料；echo兩行會取student.csv內的1-2行
-    echo $line;
-    // $line=fgets($file); 
-    // echo $line;
-    $line=explode(",",$line); /* 改為陣列 */
-    $data=[
-        'name'=>$line[1],
-        'age'=>$line[2],
-        'birthday'=>$line[3],
-        'addr'=>$line[4],
-    ];
-    save('students',$data);
-    //此時student.csv第一行寫入student表單，age:0、birthday:0000-00-00
-    //因為第一行是文字，表單設定為數字，存入格式錯誤時會變預設0
-
+    
+    $num=0; /* 把表頭(第一行文字部分)去掉 不存入表單 */
+    while(!feof($file)){
+        $line=fgets($file); /* 這行拿到if外面來，指針才會從第二行開始取 */
+        if($num!=0){
+            $line=explode(",",$line); /* 改為陣列 */
+            $data=[
+                'name'=>$line[1],
+                'age'=>$line[2],
+                'birthday'=>$line[3],
+                'addr'=>$line[4],
+                ];
+            save('students',$data);
+        }
+        $num++;
+    }
 }
 
 ?>
