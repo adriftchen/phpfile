@@ -13,11 +13,18 @@ include_once "base.php";
 //用do傳值，且按下download才繼續去撈資料
 if(!empty($_GET['do']) && $_GET['do']=='download'){
     $rows=all("students");
+    $file=fopen('download.csv',"w+"); /* w+可讀可寫 */
+    //寫入BOM檔頭，解決excel亂碼問題。要寫在foreach之前
+    $utf8_with_bom = chr(239) . chr(187) .chr(191);
+    fwrite($file,$utf8_with_bom);
     foreach($rows as $row){
         $line=implode(',',[$row['id'],$row['name'],$row['age'],$row['birthday'],$row['addr']]);  /* echo 出來因預設有索引值與key值資料會重複兩筆，用陣列再把陣列包起來，只剩一筆 */
-        echo $line . "<br>";
+        fwrite($file,$line); /* 在網頁按下載，執行成功目錄會多一個 download.csv檔(亂碼)*/
+        echo $line . "-已寫入<br>";
     }
+    fclose($file);
 
+    $filename="download.csv"; /* 下載成功才會有這個檔 */
 }
 ?>
 <!DOCTYPE html>
@@ -59,6 +66,11 @@ if(!empty($_GET['do']) && $_GET['do']=='download'){
 
 $rows=all('students');
 
+if(isset($filename)){
+?>
+<a href='download.csv' download>可以下載了!!</a>
+<?php
+}
 ?>
 <table>
     <tr>
